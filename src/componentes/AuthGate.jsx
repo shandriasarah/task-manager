@@ -1,9 +1,11 @@
 import { Loader2 } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
+import { useTheme } from "../hooks/useTheme";
 import AuthPage from "../pages/AuthPage";
 
 function AuthGate({ children }) {
   const { user, loading } = useAuth();
+  useTheme();
 
   if (loading) {
     return (
