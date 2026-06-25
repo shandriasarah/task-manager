@@ -118,18 +118,15 @@ function App() {
   return (
     <div className="min-h-screen w-full flex justify-center px-4 py-10 sm:py-16">
       <div className="w-full max-w-2xl space-y-6">
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex-1">
-            <Title subtitle="Organize seu dia com simplicidade">
-              Gerenciador de Tarefas
-            </Title>
-          </div>
-          <Toolbar
-            onExport={() => exportData({ tasks, categories })}
-            onImport={handleImport}
-            onManageCategories={() => setShowCategoryManager(true)}
-          />
-        </div>
+        <Toolbar
+          onExport={() => exportData({ tasks, categories })}
+          onImport={handleImport}
+          onManageCategories={() => setShowCategoryManager(true)}
+        />
+
+        <Title subtitle="Organize seu dia com simplicidade">
+          Gerenciador de Tarefas
+        </Title>
 
         {tasks.length > 0 && (
           <div className="flex items-center justify-between text-sm animate-fade-in">
