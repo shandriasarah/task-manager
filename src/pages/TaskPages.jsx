@@ -1,6 +1,5 @@
-import { ChevronsLeftIcon } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import Title from "../componentes/Title";
 
 function TaskPages() {
   const [searchParams] = useSearchParams();
@@ -9,22 +8,23 @@ function TaskPages() {
   const navigate = useNavigate();
 
   return (
-    <div className="h-screen w-screen bg-slate-500 p-6">
-      <div className="w-screen h-screen bg-slate-500 flex justify-center p-6">
-        <div className="w-[500px] mx-auto space-y-4">
-          <div className="flex justify-center relative mb-6">
-            <button
-              onClick={() => navigate(-1)}
-              className="absolute left-0 top-0 bottom-0 text-slate-100"
-            >
-              <ChevronsLeftIcon />
-            </button>
-            <Title>Detalhes da tarefa</Title>
+    <div className="min-h-screen w-full flex justify-center px-4 py-10 sm:py-16">
+      <div className="w-full max-w-xl space-y-6 animate-fade-in">
+        <button
+          onClick={() => navigate(-1)}
+          className="inline-flex items-center gap-2 text-zinc-400 hover:text-zinc-100 transition-colors text-sm"
+        >
+          <ArrowLeft size={16} /> Voltar
+        </button>
+
+        <div className="glass-card p-8 space-y-4">
+          <div className="inline-block px-2.5 py-1 rounded-md bg-accent/10 border border-accent/20 text-accent text-xs font-semibold uppercase tracking-wider">
+            Detalhes da tarefa
           </div>
-          <div className="bg-slate-200 p-4 rounded-md">
-            <h2 className="text-xl font-bold text-slate-600">{title}</h2>
-            <p className="text-slate-600">{description}</p>
-          </div>
+          <h2 className="text-3xl font-bold text-zinc-100 tracking-tight">
+            {title}
+          </h2>
+          <p className="text-zinc-400 leading-relaxed">{description}</p>
         </div>
       </div>
     </div>

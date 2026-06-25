@@ -1,10 +1,13 @@
-function Button(props) {
+function Button({ onClick, children, variant = "ghost" }) {
+  const variants = {
+    ghost: "btn-ghost",
+    danger: "btn-danger",
+    primary: "btn-primary",
+  };
+
   return (
-    <button
-      onClick={props.onClick}
-      className={"bg-slate-400 p-2 rounded-md text-white"}
-    >
-      {props.children}
+    <button onClick={onClick} className={variants[variant] || variants.ghost}>
+      {children}
     </button>
   );
 }

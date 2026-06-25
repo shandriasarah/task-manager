@@ -1,12 +1,22 @@
 import { useState } from "react";
+import { Plus } from "lucide-react";
 import Input from "./input";
 
 function AddTask({ onAddTaskSubmit }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
+  function handleSubmit() {
+    if (!title.trim() || !description.trim()) {
+      return alert("Por favor, preencha o título e a descrição da tarefa.");
+    }
+    onAddTaskSubmit(title, description);
+    setTitle("");
+    setDescription("");
+  }
+
   return (
-    <div className="space-y-4 p-6 bg-slate-200 rounded-md shadow flex flex-col">
+    <div className="glass-card p-6 space-y-3 animate-fade-in">
       <Input
         type="text"
         placeholder="Digite o título da tarefa"
@@ -18,20 +28,10 @@ function AddTask({ onAddTaskSubmit }) {
         placeholder="Digite a descrição da tarefa"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
+        onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
       />
-      <button
-        onClick={() => {
-          if (!title.trim() || !description.trim())
-            return alert(
-              "Por favor, preencha o título e a descrição da tarefa.",
-            );
-          onAddTaskSubmit(title, description);
-          setTitle("");
-          setDescription("");
-        }}
-        className="bg-slate-500 text-white px-4 py-2 rounded-md font-medium"
-      >
-        Adicionar
+      <button onClick={handleSubmit} className="btn-primary w-full">
+        <Plus size={18} strokeWidth={2.5} /> Adicionar tarefa
       </button>
     </div>
   );

@@ -3,9 +3,10 @@ function Input(props) {
     <input
       type={props.type}
       placeholder={props.placeholder}
-      className="border border-slate-300 outline-slate-400 px-4 py-2 rounded-md"
+      className="input-modern"
       value={props.value}
       onChange={props.onChange}
+      onKeyDown={props.onKeyDown}
     />
   );
 }
