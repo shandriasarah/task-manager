@@ -1,67 +1,64 @@
-# 📝 TaskManager
+# TaskManager
 
-Aplicação web full-stack para gerenciamento de tarefas pessoais, com autenticação, banco de dados e sincronização em tempo real entre dispositivos.
+Aplicação web full-stack para gerenciamento de tarefas pessoais. Oferece autenticação, sincronização de dados entre dispositivos e interface responsiva com suporte a tema claro e escuro.
 
-🔗 **Demo:** https://task-manager-ssg3.vercel.app
+**Demonstração:** https://task-manager-ssg3.vercel.app
 
 ![Preview](./preview.png)
 
 ---
 
-## ✨ Funcionalidades
+## Funcionalidades
 
-### 🔐 Autenticação
-- Cadastro e login com email/senha
+**Autenticação**
+- Cadastro e login com email e senha
 - Sessão persistente entre acessos
-- Cada usuária vê apenas seus próprios dados (Row Level Security)
+- Isolamento de dados por usuária através de Row Level Security no PostgreSQL
 
-### ✅ Gestão de tarefas
-- Criar, editar e excluir tarefas
-- Título e descrição (opcional)
-- Marcar como concluída com checkbox animado
-- **Datas de início e prazo final** com seletor de calendário em pt-BR
-- **Níveis de prioridade**: Alta, Média, Baixa
-- **Categorias coloridas**: 5 padrão (Casa, Trabalho, Pessoal, Consulta, Estudos) + criação ilimitada de categorias customizadas
-- Lembretes visuais automáticos: "Hoje", "Amanhã", "Atrasada 3 dias"
+**Gestão de tarefas**
+- Criação, edição, exclusão e marcação de tarefas
+- Datas de início e prazo final com seletor de calendário em português
+- Níveis de prioridade (alta, média, baixa)
+- Categorias coloridas: cinco padrão (Casa, Trabalho, Pessoal, Consulta, Estudos) e criação ilimitada de categorias personalizadas
+- Indicadores automáticos de prazo: "Hoje", "Amanhã", "Atrasada 3 dias"
 
-### 🔍 Organização
-- Busca em tempo real por título ou descrição
-- Filtros por status (Todas, Pendentes, Concluídas)
-- Filtros por categoria
-- Ordenação automática por prioridade + prazo
+**Organização**
+- Busca em tempo real por título e descrição
+- Filtros por status (todas, pendentes, concluídas) e por categoria
+- Ordenação automática por prioridade e prazo
 
-### 🎨 Interface
-- **Dark / Light mode** com persistência da preferência
-- Design moderno com paleta azul pastel
-- Totalmente responsivo (mobile-first)
-- Micro-animações suaves
-- Acessibilidade (ARIA labels, navegação por teclado)
+**Interface**
+- Tema claro e escuro com preferência persistida
+- Paleta azul pastel desenhada para reduzir fadiga visual
+- Layout responsivo mobile-first
+- Microinterações em hover e mudança de estado
+- Acessibilidade com labels ARIA e navegação por teclado
 
-### 💾 Backup
-- Exportar todas as tarefas em JSON
-- Importar backup pra restaurar o histórico
+**Portabilidade de dados**
+- Exportação de tarefas e categorias para JSON
+- Importação a partir de arquivo de backup
 
 ---
 
-## 🛠 Stack
+## Stack
 
 | Camada | Tecnologia |
 |---|---|
-| **Frontend** | React 18 + Vite |
-| **Estilização** | Tailwind CSS |
-| **Roteamento** | React Router 7 |
-| **Backend / DB** | Supabase (PostgreSQL + Auth) |
-| **UI / Icons** | lucide-react |
-| **Date Picker** | react-day-picker + date-fns |
-| **Deploy** | Vercel (CI/CD automático) |
+| Frontend | React 18, Vite |
+| Estilização | Tailwind CSS |
+| Roteamento | React Router 7 |
+| Backend | Supabase (PostgreSQL, Auth) |
+| Ícones | lucide-react |
+| Date picker | react-day-picker, date-fns |
+| Hospedagem | Vercel (CI/CD via GitHub) |
 
 ---
 
-## 🏗 Arquitetura
+## Arquitetura
 
 ```
 src/
-├── componentes/      # componentes reutilizáveis (UI puro)
+├── componentes/      Componentes de interface reutilizáveis
 │   ├── AddTask.jsx
 │   ├── Tasks.jsx
 │   ├── TaskForm.jsx
@@ -72,75 +69,73 @@ src/
 │   ├── SearchBar.jsx
 │   ├── ThemeToggle.jsx
 │   └── AuthGate.jsx
-├── pages/            # páginas/rotas
+├── pages/            Componentes de rota
 │   ├── AuthPage.jsx
 │   └── TaskPages.jsx
-├── hooks/            # lógica de estado isolada
+├── hooks/            Hooks customizados (estado e efeitos)
 │   ├── useAuth.js
 │   ├── useTasks.js
 │   ├── useCategories.js
 │   └── useTheme.js
-├── lib/              # configuração de bibliotecas externas
+├── lib/              Configuração de bibliotecas externas
 │   ├── supabase.js
 │   └── mappers.js
-└── utils/            # helpers puros
+└── utils/            Funções utilitárias puras
     ├── dueDate.js
     └── backup.js
 ```
 
 ### Decisões técnicas
-- **Custom hooks** isolam toda lógica de estado e API, deixando componentes focados em UI
-- **Row Level Security no Supabase** garante isolamento de dados sem código extra no client
-- **Optimistic UI** em toggle e delete pra responsividade instantânea
-- **CSS via Tailwind utility classes + @layer components** pra evitar duplicação
-- **Migração automática de schema** no hook (compatibilidade com dados antigos)
+
+- **Hooks customizados** encapsulam estado e efeitos colaterais, mantendo os componentes focados em apresentação.
+- **Row Level Security** na camada de banco garante isolamento de dados entre usuárias sem depender de validação no cliente.
+- **Atualizações otimistas de UI** em operações de toggle e exclusão para resposta instantânea, com rollback em caso de falha.
+- **Migração inline de schema** dentro dos hooks de dados preserva compatibilidade com payloads antigos do localStorage.
+- **Classes utilitárias do Tailwind** combinadas com componentes compartilhados em `@layer components` para evitar duplicação.
 
 ---
 
-## 💻 Rodando localmente
+## Como executar
 
 ### Pré-requisitos
-- Node.js 18+
-- Conta gratuita no [Supabase](https://supabase.com)
 
-### Passo a passo
+- Node.js 18 ou superior
+- Projeto gratuito no [Supabase](https://supabase.com)
+
+### Instalação
 
 ```bash
-# Clone o repositório
 git clone https://github.com/shandriasarah/task-manager.git
 cd task-manager
-
-# Instale as dependências
 npm install
-
-# Configure as variáveis de ambiente
 cp .env.example .env
-# Edite .env com suas credenciais do Supabase
 ```
 
-### Configurando o Supabase
+Edite o arquivo `.env` com as credenciais do seu projeto Supabase.
 
-1. Crie um projeto em https://supabase.com
-2. Vá em **SQL Editor** e rode o script de `database/schema.sql` (ou veja seção abaixo)
-3. Em **Settings → API**, copie a `Project URL` e a `publishable key`
-4. Cole no seu arquivo `.env`:
+### Configuração do Supabase
+
+1. Crie um novo projeto no painel do Supabase.
+2. Acesse o SQL Editor e execute o schema disponível na seção abaixo.
+3. Em **Settings → API**, copie a `Project URL` e a `publishable key`.
+4. Adicione ao arquivo `.env`:
 
 ```bash
 VITE_SUPABASE_URL=https://seu-projeto.supabase.co
 VITE_SUPABASE_ANON_KEY=sb_publishable_...
 ```
 
-### Rodando
+### Execução
 
 ```bash
 npm run dev
 ```
 
-Acesse http://localhost:5173.
+A aplicação fica disponível em http://localhost:5173.
 
 ---
 
-## 🗄️ Schema do banco
+## Schema do banco
 
 ```sql
 create table categories (
@@ -169,7 +164,6 @@ create table tasks (
 alter table tasks enable row level security;
 alter table categories enable row level security;
 
--- Policies (uma usuária só acessa seus próprios dados)
 create policy "Users can manage their own tasks"
   on tasks for all using (auth.uid() = user_id);
 
@@ -179,24 +173,22 @@ create policy "Users can manage their own categories"
 
 ---
 
-## 📚 O que aprendi com este projeto
+## Scripts disponíveis
 
-- Estruturar uma aplicação React em camadas (UI, hooks, libs, utils)
-- Implementar autenticação completa com Supabase Auth
-- Modelar banco PostgreSQL com Row Level Security para multi-tenant
-- Custom hooks para encapsular lógica de estado e side effects
-- Dark mode com Tailwind via `darkMode: "class"` e CSS variables
-- Deploy contínuo com variáveis de ambiente na Vercel
-- Migração de localStorage para banco mantendo compatibilidade
-- Tratamento de erros + estados de loading em operações assíncronas
+| Comando | Descrição |
+|---|---|
+| `npm run dev` | Inicia o servidor de desenvolvimento |
+| `npm run build` | Gera o bundle de produção |
+| `npm run preview` | Visualiza o build de produção localmente |
+| `npm run lint` | Executa o ESLint sobre os arquivos do projeto |
 
 ---
 
-## 📝 Licença
+## Licença
 
 MIT
 
 ---
 
 Desenvolvido por **Sarah Shandria**
-[LinkedIn](https://linkedin.com/in/shandriasarah) • [GitHub](https://github.com/shandriasarah)
+[LinkedIn](https://linkedin.com/in/shandriasarah) · [GitHub](https://github.com/shandriasarah)
