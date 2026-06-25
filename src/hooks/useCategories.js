@@ -1,14 +1,14 @@
-import { useEffect, useState } from "react";
-import { v4 } from "uuid";
+import { useCallback, useEffect, useState } from "react";
+import { supabase } from "../lib/supabase";
+import { dbToCategory } from "../lib/mappers";
+import { useAuth } from "./useAuth";
 
-const STORAGE_KEY = "categories";
-
-export const DEFAULT_CATEGORIES = [
-  { id: "cat-casa", name: "Casa", color: "sage", isDefault: true },
-  { id: "cat-trabalho", name: "Trabalho", color: "accent", isDefault: true },
-  { id: "cat-pessoal", name: "Pessoal", color: "peach", isDefault: true },
-  { id: "cat-consulta", name: "Consulta", color: "rose", isDefault: true },
-  { id: "cat-estudos", name: "Estudos", color: "violet", isDefault: true },
+const DEFAULT_CATEGORIES = [
+  { name: "Casa", color: "sage", is_default: true },
+  { name: "Trabalho", color: "accent", is_default: true },
+  { name: "Pessoal", color: "peach", is_default: true },
+  { name: "Consulta", color: "rose", is_default: true },
+  { name: "Estudos", color: "violet", is_default: true },
 ];
 
 export const CATEGORY_COLORS = [
@@ -27,35 +27,98 @@ export function getCategoryColor(colorKey) {
 }
 
 export function useCategories() {
-  const [categories, setCategories] = useState(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) return JSON.parse(stored);
-    return DEFAULT_CATEGORIES;
-  });
+  const { user } = useAuth();
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchCategories = useCallback(async () => {
+    if (!user) {
+      setCategories([]);
+      setLoading(false);
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from("categories")
+      .select("*")
+      .order("created_at", { ascending: true });
+
+    if (error) {
+      console.error("Erro ao buscar categorias:", error);
+      setLoading(false);
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      const seeded = DEFAULT_CATEGORIES.map((c) => ({ ...c, user_id: user.id }));
+      const { data: inserted, error: insertError } = await supabase
+        .from("categories")
+        .insert(seeded)
+        .select();
+
+      if (insertError) {
+        console.error("Erro ao criar categorias padrão:", insertError);
+        setCategories([]);
+      } else {
+        setCategories(inserted.map(dbToCategory));
+      }
+    } else {
+      setCategories(data.map(dbToCategory));
+    }
+
+    setLoading(false);
+  }, [user]);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(categories));
-  }, [categories]);
+    fetchCategories();
+  }, [fetchCategories]);
 
-  function addCategory({ name, color }) {
-    const newCategory = {
-      id: v4(),
-      name: name.trim(),
-      color,
-      isDefault: false,
-    };
+  async function addCategory({ name, color }) {
+    if (!user) return;
+    const { data, error } = await supabase
+      .from("categories")
+      .insert({ name: name.trim(), color, is_default: false, user_id: user.id })
+      .select()
+      .single();
+
+    if (error) {
+      console.error("Erro ao adicionar categoria:", error);
+      alert("Não foi possível adicionar a categoria.");
+      return null;
+    }
+
+    const newCategory = dbToCategory(data);
     setCategories((prev) => [...prev, newCategory]);
     return newCategory;
   }
 
-  function updateCategory(id, updates) {
+  async function updateCategory(id, updates) {
+    const dbUpdates = {};
+    if (updates.name !== undefined) dbUpdates.name = updates.name;
+    if (updates.color !== undefined) dbUpdates.color = updates.color;
+
+    const { error } = await supabase
+      .from("categories")
+      .update(dbUpdates)
+      .eq("id", id);
+
+    if (error) {
+      console.error("Erro ao atualizar categoria:", error);
+      return;
+    }
+
     setCategories((prev) =>
-      prev.map((cat) => (cat.id === id ? { ...cat, ...updates } : cat)),
+      prev.map((c) => (c.id === id ? { ...c, ...updates } : c)),
     );
   }
 
-  function deleteCategory(id) {
-    setCategories((prev) => prev.filter((cat) => cat.id !== id));
+  async function deleteCategory(id) {
+    const { error } = await supabase.from("categories").delete().eq("id", id);
+    if (error) {
+      console.error("Erro ao deletar categoria:", error);
+      return;
+    }
+    setCategories((prev) => prev.filter((c) => c.id !== id));
   }
 
   function getCategory(id) {
@@ -64,6 +127,7 @@ export function useCategories() {
 
   return {
     categories,
+    loading,
     addCategory,
     updateCategory,
     deleteCategory,

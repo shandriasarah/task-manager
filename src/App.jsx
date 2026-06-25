@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { CheckCircle2, AlertCircle } from "lucide-react";
+import { CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 import AddTask from "./componentes/AddTask";
 import Tasks from "./componentes/Tasks";
 import Title from "./componentes/Title";
@@ -17,6 +17,7 @@ const PRIORITY_ORDER = { high: 0, medium: 1, low: 2 };
 function App() {
   const {
     tasks,
+    loading: tasksLoading,
     addTask,
     updateTask,
     toggleTask,
@@ -25,10 +26,13 @@ function App() {
   } = useTasks();
   const {
     categories,
+    loading: categoriesLoading,
     addCategory,
     deleteCategory,
     getCategory,
   } = useCategories();
+
+  const isLoading = tasksLoading || categoriesLoading;
 
   const [filter, setFilter] = useState("all");
   const [categoryFilter, setCategoryFilter] = useState("all");
@@ -93,18 +97,22 @@ function App() {
 
   async function handleImport(file) {
     try {
-      const { tasks: importedTasks, categories: importedCategories } =
-        await importDataFromFile(file);
+      const { tasks: importedTasks } = await importDataFromFile(file);
       const confirmMessage = `Importar ${importedTasks.length} tarefa(s)? Isso vai substituir suas tarefas atuais.`;
       if (!confirm(confirmMessage)) return;
-      replaceTasks(importedTasks);
-      if (importedCategories) {
-        localStorage.setItem("categories", JSON.stringify(importedCategories));
-        window.location.reload();
-      }
+      await replaceTasks(importedTasks);
     } catch (err) {
       alert("Não foi possível importar o arquivo: " + err.message);
     }
+  }
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen w-full flex flex-col items-center justify-center gap-3">
+        <Loader2 size={28} className="animate-spin text-accent" />
+        <p className="text-sm text-ink-500">Carregando suas tarefas...</p>
+      </div>
+    );
   }
 
   return (

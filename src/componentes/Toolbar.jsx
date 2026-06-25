@@ -1,9 +1,11 @@
 import { useRef } from "react";
-import { Download, Upload, Tag } from "lucide-react";
+import { Download, Upload, Tag, LogOut } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
+import { useAuth } from "../hooks/useAuth";
 
 function Toolbar({ onExport, onImport, onManageCategories }) {
   const fileInputRef = useRef(null);
+  const { user, signOut } = useAuth();
 
   function handleFileChange(e) {
     const file = e.target.files?.[0];
@@ -11,8 +13,19 @@ function Toolbar({ onExport, onImport, onManageCategories }) {
     e.target.value = "";
   }
 
+  async function handleSignOut() {
+    if (confirm("Deseja realmente sair?")) {
+      await signOut();
+    }
+  }
+
   return (
     <div className="flex items-center justify-end gap-1">
+      {user?.email && (
+        <span className="hidden sm:inline text-xs text-ink-500 mr-2 truncate max-w-[140px]">
+          {user.email}
+        </span>
+      )}
       <button
         onClick={onManageCategories}
         className="btn-ghost"
@@ -45,6 +58,14 @@ function Toolbar({ onExport, onImport, onManageCategories }) {
         className="hidden"
       />
       <ThemeToggle />
+      <button
+        onClick={handleSignOut}
+        className="btn-ghost"
+        aria-label="Sair"
+        title="Sair"
+      >
+        <LogOut size={18} />
+      </button>
     </div>
   );
 }
