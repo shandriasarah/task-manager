@@ -1,9 +1,10 @@
 import { useMemo, useState } from "react";
 import { v4 } from "uuid";
-import { CheckCircle2, ListTodo } from "lucide-react";
+import { CheckCircle2, AlertCircle } from "lucide-react";
 import AddTask from "./componentes/AddTask";
 import Tasks from "./componentes/Tasks";
 import Title from "./componentes/Title";
+import { getDueDateInfo } from "./utils/dueDate";
 
 function App() {
   const [tasks, setTasks] = useState(
@@ -27,11 +28,12 @@ function App() {
     saveTasks(tasks.filter((task) => task.id !== taskId));
   }
 
-  function onAddTaskSubmit(title, description) {
+  function onAddTaskSubmit(title, description, dueDate) {
     const newTask = {
       id: v4(),
       title,
       description,
+      dueDate: dueDate || null,
       isCompleted: false,
     };
     saveTasks([...tasks, newTask]);
@@ -39,6 +41,16 @@ function App() {
 
   const completedCount = useMemo(
     () => tasks.filter((t) => t.isCompleted).length,
+    [tasks],
+  );
+
+  const overdueCount = useMemo(
+    () =>
+      tasks.filter((t) => {
+        if (t.isCompleted) return false;
+        const info = getDueDateInfo(t.dueDate, false);
+        return info?.variant === "overdue";
+      }).length,
     [tasks],
   );
 
@@ -50,7 +62,11 @@ function App() {
 
   const filters = [
     { key: "all", label: "Todas", count: tasks.length },
-    { key: "pending", label: "Pendentes", count: tasks.length - completedCount },
+    {
+      key: "pending",
+      label: "Pendentes",
+      count: tasks.length - completedCount,
+    },
     { key: "completed", label: "Concluídas", count: completedCount },
   ];
 
@@ -63,18 +79,25 @@ function App() {
 
         {tasks.length > 0 && (
           <div className="flex items-center justify-between text-sm animate-fade-in">
-            <div className="flex items-center gap-2 text-zinc-400">
+            <div className="flex items-center gap-2 text-ink-500">
               <CheckCircle2 size={16} className="text-accent" />
               <span>
-                <span className="text-zinc-100 font-semibold">{completedCount}</span>
+                <span className="text-ink-900 font-semibold">
+                  {completedCount}
+                </span>
                 {" de "}
-                <span className="text-zinc-100 font-semibold">{tasks.length}</span>
-                {" tarefas concluídas"}
+                <span className="text-ink-900 font-semibold">
+                  {tasks.length}
+                </span>
+                {" concluídas"}
               </span>
             </div>
-            <div className="flex items-center gap-1 text-zinc-500">
-              <ListTodo size={14} />
-            </div>
+            {overdueCount > 0 && (
+              <div className="badge-overdue">
+                <AlertCircle size={12} strokeWidth={2.5} />
+                {overdueCount} atrasada{overdueCount > 1 ? "s" : ""}
+              </div>
+            )}
           </div>
         )}
 
@@ -88,8 +111,8 @@ function App() {
                 onClick={() => setFilter(f.key)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                   filter === f.key
-                    ? "bg-accent text-white shadow-lg shadow-accent/20"
-                    : "bg-white/[0.04] text-zinc-400 hover:bg-white/[0.08] hover:text-zinc-200"
+                    ? "bg-accent text-white shadow-md shadow-accent/25"
+                    : "bg-surface text-ink-500 hover:bg-surface-soft hover:text-ink-900 border border-ink-300/30"
                 }`}
               >
                 {f.label}
@@ -105,7 +128,7 @@ function App() {
           onDeleteTaskClick={onDeleteTaskClick}
         />
 
-        <footer className="text-center text-zinc-600 text-xs pt-8">
+        <footer className="text-center text-ink-400 text-xs pt-8">
           Feito com React + Tailwind
         </footer>
       </div>

@@ -7,13 +7,33 @@ export default {
         sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
       },
       colors: {
-        bg: "#0a0a0f",
-        surface: "#14141c",
-        "surface-hover": "#1c1c28",
+        bg: "#f3f7fb",
+        surface: "#ffffff",
+        "surface-soft": "#eaf2f9",
+        ink: {
+          900: "#1c2b3d",
+          700: "#34495f",
+          500: "#647689",
+          400: "#8a99ac",
+          300: "#b8c4d2",
+        },
         accent: {
-          DEFAULT: "#8b5cf6",
-          hover: "#7c3aed",
-          soft: "rgba(139, 92, 246, 0.15)",
+          DEFAULT: "#7ab8dc",
+          hover: "#5a9cc4",
+          soft: "#dcecf6",
+          ring: "#a5cde4",
+        },
+        sage: {
+          DEFAULT: "#8cc8a8",
+          soft: "#dcefe2",
+        },
+        peach: {
+          DEFAULT: "#f0b890",
+          soft: "#fae3d2",
+        },
+        rose: {
+          DEFAULT: "#eaa5a5",
+          soft: "#fae2e2",
         },
       },
       animation: {

@@ -10,37 +10,62 @@
   }
 
   body {
-    @apply bg-bg text-zinc-100 min-h-screen;
+    @apply bg-bg text-ink-900 min-h-screen;
     background-image:
-      radial-gradient(at 15% 0%, rgba(139, 92, 246, 0.18) 0px, transparent 50%),
-      radial-gradient(at 85% 100%, rgba(16, 185, 129, 0.10) 0px, transparent 50%);
+      radial-gradient(at 15% 0%, rgba(122, 184, 220, 0.22) 0px, transparent 55%),
+      radial-gradient(at 85% 100%, rgba(165, 205, 228, 0.18) 0px, transparent 55%),
+      radial-gradient(at 50% 50%, rgba(220, 236, 246, 0.4) 0px, transparent 70%);
     background-attachment: fixed;
   }
 }
 
 @layer components {
-  .glass-card {
-    @apply bg-surface/80 backdrop-blur-xl border border-white/[0.08] rounded-2xl shadow-2xl shadow-black/40;
+  .soft-card {
+    @apply bg-surface border border-ink-300/30 rounded-2xl shadow-[0_4px_24px_-8px_rgba(31,29,44,0.08)];
   }
 
   .input-modern {
-    @apply w-full bg-white/[0.03] border border-white/[0.08] rounded-xl px-4 py-3 text-zinc-100 placeholder:text-zinc-500 transition-all outline-none;
+    @apply w-full bg-surface border border-ink-300/40 rounded-xl px-4 py-3 text-ink-900 placeholder:text-ink-400 transition-all outline-none;
   }
 
   .input-modern:focus {
-    @apply border-accent ring-2 ring-accent/20 bg-white/[0.05];
+    @apply border-accent ring-2 ring-accent-ring/40 bg-white;
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 bg-accent hover:bg-accent-hover text-white font-semibold px-5 py-3 rounded-xl transition-all active:scale-[0.98] hover:shadow-lg hover:shadow-accent/30;
+    @apply inline-flex items-center justify-center gap-2 bg-accent hover:bg-accent-hover text-white font-semibold px-5 py-3 rounded-xl transition-all active:scale-[0.98] hover:shadow-lg hover:shadow-accent/25;
   }
 
   .btn-ghost {
-    @apply inline-flex items-center justify-center p-2 rounded-lg text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.06] transition-all;
+    @apply inline-flex items-center justify-center p-2 rounded-lg text-ink-400 hover:text-ink-900 hover:bg-ink-300/15 transition-all;
   }
 
   .btn-danger {
-    @apply inline-flex items-center justify-center p-2 rounded-lg text-zinc-400 hover:text-red-400 hover:bg-red-500/10 transition-all;
+    @apply inline-flex items-center justify-center p-2 rounded-lg text-ink-400 hover:text-rose-600 hover:bg-rose-soft/70 transition-all;
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-medium;
+  }
+
+  .badge-overdue {
+    @apply badge bg-rose-soft text-rose-700;
+  }
+
+  .badge-today {
+    @apply badge bg-peach-soft text-orange-700;
+  }
+
+  .badge-soon {
+    @apply badge bg-accent-soft text-accent-hover;
+  }
+
+  .badge-future {
+    @apply badge bg-surface-soft text-ink-500;
+  }
+
+  .badge-done {
+    @apply badge bg-sage-soft text-emerald-700;
   }
 }
 
@@ -51,9 +76,9 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(31, 29, 44, 0.12);
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(31, 29, 44, 0.25);
 }
