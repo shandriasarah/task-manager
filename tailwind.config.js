@@ -1,15 +1,25 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  darkMode: "class",
   theme: {
     extend: {
       fontFamily: {
         sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
       },
       colors: {
-        bg: "#f3f7fb",
-        surface: "#ffffff",
-        "surface-soft": "#eaf2f9",
+        bg: {
+          DEFAULT: "#f3f7fb",
+          dark: "#0e1620",
+        },
+        surface: {
+          DEFAULT: "#ffffff",
+          dark: "#172331",
+        },
+        "surface-soft": {
+          DEFAULT: "#eaf2f9",
+          dark: "#1f2d3d",
+        },
         ink: {
           900: "#1c2b3d",
           700: "#34495f",
@@ -39,6 +49,7 @@ export default {
       animation: {
         "slide-in": "slideIn 0.3s ease-out",
         "fade-in": "fadeIn 0.4s ease-out",
+        "scale-in": "scaleIn 0.2s ease-out",
       },
       keyframes: {
         slideIn: {
@@ -48,6 +59,10 @@ export default {
         fadeIn: {
           "0%": { opacity: "0" },
           "100%": { opacity: "1" },
+        },
+        scaleIn: {
+          "0%": { opacity: "0", transform: "scale(0.95)" },
+          "100%": { opacity: "1", transform: "scale(1)" },
         },
       },
     },

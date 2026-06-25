@@ -1,7 +1,15 @@
-export function getDueDateInfo(dueDate, isCompleted) {
-  if (!dueDate) return null;
+function parseDate(value) {
+  if (!value) return null;
+  const d = new Date(value + "T00:00:00");
+  return isNaN(d.getTime()) ? null : d;
+}
 
-  const due = new Date(dueDate + "T23:59:59");
+export function getDueDateInfo(endDate, isCompleted) {
+  if (!endDate) return null;
+
+  const due = parseDate(endDate);
+  if (!due) return null;
+
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const dueDay = new Date(due.getFullYear(), due.getMonth(), due.getDate());
@@ -31,13 +39,35 @@ export function getDueDateInfo(dueDate, isCompleted) {
   return { label: formatted, variant: "future" };
 }
 
-export function formatFullDate(dueDate) {
-  if (!dueDate) return null;
-  const due = new Date(dueDate + "T00:00:00");
-  return due.toLocaleDateString("pt-BR", {
+export function formatFullDate(dateStr) {
+  const d = parseDate(dateStr);
+  if (!d) return null;
+  return d.toLocaleDateString("pt-BR", {
     weekday: "long",
     day: "2-digit",
     month: "long",
     year: "numeric",
   });
 }
+
+export function formatShortDate(dateStr) {
+  const d = parseDate(dateStr);
+  if (!d) return null;
+  return d.toLocaleDateString("pt-BR", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+}
+
+export function formatDateRange(startDate, endDate) {
+  const start = formatShortDate(startDate);
+  const end = formatShortDate(endDate);
+  if (start && end) return `${start} → ${end}`;
+  if (end) return `Até ${end}`;
+  if (start) return `A partir de ${start}`;
+  return null;
+}
+
+export const DATE_MIN = "2020-01-01";
+export const DATE_MAX = "2099-12-31";

@@ -10,38 +10,51 @@
   }
 
   body {
-    @apply bg-bg text-ink-900 min-h-screen;
+    @apply bg-bg dark:bg-bg-dark text-ink-900 dark:text-ink-300 min-h-screen transition-colors duration-300;
     background-image:
       radial-gradient(at 15% 0%, rgba(122, 184, 220, 0.22) 0px, transparent 55%),
-      radial-gradient(at 85% 100%, rgba(165, 205, 228, 0.18) 0px, transparent 55%),
-      radial-gradient(at 50% 50%, rgba(220, 236, 246, 0.4) 0px, transparent 70%);
+      radial-gradient(at 85% 100%, rgba(165, 205, 228, 0.18) 0px, transparent 55%);
     background-attachment: fixed;
+  }
+
+  html.dark body {
+    background-image:
+      radial-gradient(at 15% 0%, rgba(122, 184, 220, 0.12) 0px, transparent 55%),
+      radial-gradient(at 85% 100%, rgba(122, 184, 220, 0.08) 0px, transparent 55%);
   }
 }
 
 @layer components {
   .soft-card {
-    @apply bg-surface border border-ink-300/30 rounded-2xl shadow-[0_4px_24px_-8px_rgba(31,29,44,0.08)];
+    @apply bg-surface dark:bg-surface-dark border border-ink-300/30 dark:border-white/[0.06] rounded-2xl shadow-[0_4px_24px_-8px_rgba(31,29,44,0.08)] dark:shadow-[0_4px_24px_-8px_rgba(0,0,0,0.5)];
   }
 
   .input-modern {
-    @apply w-full bg-surface border border-ink-300/40 rounded-xl px-4 py-3 text-ink-900 placeholder:text-ink-400 transition-all outline-none;
+    @apply w-full bg-surface dark:bg-surface-soft-dark border border-ink-300/40 dark:border-white/[0.08] rounded-xl px-4 py-3 text-ink-900 dark:text-ink-300 placeholder:text-ink-400 dark:placeholder:text-ink-500 transition-all outline-none;
   }
 
   .input-modern:focus {
-    @apply border-accent ring-2 ring-accent-ring/40 bg-white;
+    @apply border-accent ring-2 ring-accent-ring/40 bg-white dark:bg-surface-dark;
   }
 
   .btn-primary {
     @apply inline-flex items-center justify-center gap-2 bg-accent hover:bg-accent-hover text-white font-semibold px-5 py-3 rounded-xl transition-all active:scale-[0.98] hover:shadow-lg hover:shadow-accent/25;
   }
 
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 bg-surface dark:bg-surface-soft-dark border border-ink-300/40 dark:border-white/[0.08] text-ink-700 dark:text-ink-300 hover:bg-surface-soft dark:hover:bg-white/[0.04] font-medium px-4 py-2.5 rounded-xl transition-all;
+  }
+
   .btn-ghost {
-    @apply inline-flex items-center justify-center p-2 rounded-lg text-ink-400 hover:text-ink-900 hover:bg-ink-300/15 transition-all;
+    @apply inline-flex items-center justify-center p-2 rounded-lg text-ink-400 hover:text-ink-900 dark:hover:text-white hover:bg-ink-300/15 dark:hover:bg-white/[0.06] transition-all;
   }
 
   .btn-danger {
-    @apply inline-flex items-center justify-center p-2 rounded-lg text-ink-400 hover:text-rose-600 hover:bg-rose-soft/70 transition-all;
+    @apply inline-flex items-center justify-center p-2 rounded-lg text-ink-400 hover:text-rose-600 hover:bg-rose-soft/70 dark:hover:bg-rose-500/10 transition-all;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium;
   }
 
   .badge {
@@ -49,24 +62,124 @@
   }
 
   .badge-overdue {
-    @apply badge bg-rose-soft text-rose-700;
+    @apply badge bg-rose-soft text-rose-700 dark:bg-rose-500/15 dark:text-rose-300;
   }
 
   .badge-today {
-    @apply badge bg-peach-soft text-orange-700;
+    @apply badge bg-peach-soft text-orange-700 dark:bg-orange-500/15 dark:text-orange-300;
   }
 
   .badge-soon {
-    @apply badge bg-accent-soft text-accent-hover;
+    @apply badge bg-accent-soft text-accent-hover dark:bg-accent/15 dark:text-accent-ring;
   }
 
   .badge-future {
-    @apply badge bg-surface-soft text-ink-500;
+    @apply badge bg-surface-soft text-ink-500 dark:bg-white/[0.04] dark:text-ink-400;
   }
 
   .badge-done {
-    @apply badge bg-sage-soft text-emerald-700;
+    @apply badge bg-sage-soft text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300;
   }
+
+  .priority-high {
+    @apply bg-rose-500;
+  }
+  .priority-medium {
+    @apply bg-peach;
+  }
+  .priority-low {
+    @apply bg-ink-300 dark:bg-ink-500;
+  }
+
+  .modal-backdrop {
+    @apply fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fade-in;
+  }
+
+  .modal-content {
+    @apply soft-card p-6 w-full max-w-md max-h-[90vh] overflow-y-auto animate-scale-in;
+  }
+}
+
+.rdp-root {
+  --rdp-accent-color: theme(colors.accent.DEFAULT);
+  --rdp-accent-background-color: theme(colors.accent.soft);
+  --rdp-day_button-border-radius: 8px;
+  --rdp-selected-border: 2px solid theme(colors.accent.DEFAULT);
+  --rdp-day-height: 36px;
+  --rdp-day-width: 36px;
+  font-family: "Inter", sans-serif;
+}
+
+.dark .rdp-root {
+  --rdp-accent-background-color: rgba(122, 184, 220, 0.15);
+}
+
+.rdp-caption_label,
+.rdp-weekday {
+  color: theme(colors.ink.700);
+  font-weight: 600;
+}
+
+.dark .rdp-caption_label,
+.dark .rdp-weekday {
+  color: theme(colors.ink.300);
+}
+
+.rdp-day_button {
+  color: theme(colors.ink.700);
+  font-weight: 500;
+}
+
+.dark .rdp-day_button {
+  color: theme(colors.ink.300);
+}
+
+.rdp-day_button:hover:not([disabled]) {
+  background-color: theme(colors.surface-soft.DEFAULT);
+}
+
+.dark .rdp-day_button:hover:not([disabled]) {
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+.rdp-selected .rdp-day_button {
+  background-color: theme(colors.accent.DEFAULT) !important;
+  color: white !important;
+  border: none !important;
+}
+
+.rdp-today:not(.rdp-selected) .rdp-day_button {
+  color: theme(colors.accent.hover);
+  font-weight: 700;
+}
+
+.rdp-outside .rdp-day_button {
+  color: theme(colors.ink.400);
+  opacity: 0.5;
+}
+
+.rdp-disabled .rdp-day_button {
+  color: theme(colors.ink.300);
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.rdp-button_previous,
+.rdp-button_next {
+  color: theme(colors.ink.500);
+  border-radius: 8px;
+  padding: 4px;
+}
+
+.rdp-button_previous:hover,
+.rdp-button_next:hover {
+  background-color: theme(colors.surface-soft.DEFAULT);
+  color: theme(colors.accent.hover);
+}
+
+.dark .rdp-button_previous:hover,
+.dark .rdp-button_next:hover {
+  background-color: rgba(255, 255, 255, 0.06);
 }
 
 ::-webkit-scrollbar {
@@ -79,6 +192,12 @@
   background: rgba(31, 29, 44, 0.12);
   border-radius: 10px;
 }
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+}
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(31, 29, 44, 0.25);
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.15);
 }
