@@ -2,9 +2,14 @@
 
 Aplicação web full-stack para gerenciamento de tarefas pessoais. Oferece autenticação, sincronização de dados entre dispositivos e interface responsiva com suporte a tema claro e escuro.
 
-**Demonstração:** https://task-manager-ssg3.vercel.app
+**Demonstração:** [task-manager-ssg3.vercel.app](https://task-manager-ssg3.vercel.app)
 
-![Preview](./preview.png)
+![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat&logo=vite&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=flat&logo=tailwindcss&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-3FCF8E?style=flat&logo=supabase&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat&logo=postgresql&logoColor=white)
+![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat&logo=vercel&logoColor=white)
 
 ---
 
@@ -191,4 +196,4 @@ MIT
 ---
 
 Desenvolvido por **Sarah Shandria**
-[LinkedIn](https://linkedin.com/in/shandriasarah) · [GitHub](https://github.com/shandriasarah)
+[LinkedIn](https://www.linkedin.com/in/sarah-shandria-727b86376/) · [GitHub](https://github.com/shandriasarah)
